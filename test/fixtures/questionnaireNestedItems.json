@@ -1,0 +1,42 @@
+{
+  "resourceType": "Questionnaire",
+  "id": "2",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\nTest\n</div>"
+  },
+  "url": "http://hl7.org/fhir/Questionnaire/2",
+  "title": "Questionnaire with nested items",
+  "status": "draft",
+  "subjectType": [
+    "Patient"
+  ],
+  "date": "2020-03",
+  "item": [
+    {
+      "linkId": "1",
+      "text": "Here is a group question",
+      "type": "group",
+      "item": [
+        {
+          "linkId": "2",
+          "text": "Here is a boolean question",
+          "type": "boolean"
+        },
+        {
+          "linkId": "3",
+          "text": "Here is a display only question",
+          "type": "display",
+          "_text": {
+            "extension": [
+              {
+                "url": "http://hl7.org/fhir/StructureDefinition/rendering-xhtml",
+                "valueString": "Here is a display only question"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]       
+}

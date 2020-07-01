@@ -1,0 +1,44 @@
+{
+  "resourceType": "Questionnaire",
+  "id": "4",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\nTest\n</div>"
+  },
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-behave"
+    ]
+  },
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-entryMode",
+      "valueCode": "random"
+    }
+  ],
+  "url": "http://hl7.org/fhir/Questionnaire/1",
+  "title": "Questionnaire with a random entry mode",
+  "status": "draft",
+  "subjectType": [
+    "Patient"
+  ],
+  "date": "2020-03",
+  "item": [
+    {
+      "linkId": "1",
+      "text": "Here is a multiple choice question",
+      "type": "choice",
+      "answerOption": [
+        {
+          "valueString": "First choice"
+        },
+        {
+          "valueString": "Second choice"
+        },
+        {
+          "valueString": "Third choice"
+        }
+      ]
+    }
+  ]       
+}

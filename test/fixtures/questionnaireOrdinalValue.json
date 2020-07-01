@@ -1,0 +1,51 @@
+{
+  "resourceType": "Questionnaire",
+  "id": "1",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\nTest\n</div>"
+  },
+  "url": "http://hl7.org/fhir/Questionnaire/1",
+  "title": "Questionnaire with ordinal values assigned to each answer option",
+  "status": "draft",
+  "subjectType": [
+    "Patient"
+  ],
+  "date": "2020-03",
+  "item": [
+    {
+      "linkId": "1",
+      "text": "Here is a multiple choice question",
+      "type": "choice",
+      "answerOption": [
+        {
+          "valueString": "First choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+              "valueDecimal": 1
+            }
+          ]
+        },
+        {
+          "valueString": "Second choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+              "valueDecimal": 2
+            }
+          ]
+        },
+        {
+          "valueString": "Third choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue",
+              "valueDecimal": 3
+            }
+          ]
+        }
+      ]
+    }
+  ]       
+}

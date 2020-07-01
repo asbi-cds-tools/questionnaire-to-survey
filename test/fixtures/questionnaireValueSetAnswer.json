@@ -1,0 +1,22 @@
+{
+  "resourceType": "Questionnaire",
+  "id": "3",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\nTest\n</div>"
+  },
+  "url": "http://hl7.org/fhir/Questionnaire/1",
+  "title": "Questionnaire with answerValueSet",
+  "status": "draft",
+  "subjectType": [
+    "Patient"
+  ],
+  "date": "2020-03",
+  "item": [
+    {
+      "linkId": "1",
+      "type": "choice",
+      "answerValueSet": "http://hl7.org/fhir/ValueSet/yesnodontknow"
+    }
+  ]       
+}
