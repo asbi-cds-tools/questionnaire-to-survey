@@ -40,7 +40,7 @@ The following FHIR<sup>&reg;</sup> and SDC extensions are currently supported:
 
 | Name | URL | Notes & Limitations |
 | --- | --- | --- |
-| `sdc-questionnaire-entryMode` | [http://build.fhir.org/ig/HL7/sdc/ValueSet-entryMode.html](http://build.fhir.org/ig/HL7/sdc/ValueSet-entryMode.html) | Currently only `prior-edit` entry mode is supported. |
+| `sdc-questionnaire-entryMode` | [http://build.fhir.org/ig/HL7/sdc/ValueSet-entryMode.html](http://build.fhir.org/ig/HL7/sdc/ValueSet-entryMode.html) | \*\***NEW**\*\* `random`, `sequential`, and `prior-edit` entry modes are all supported. See `./test/conversionTests.js` for a simple example. Default value is `prior-edit`. |
 | `sdc-questionnaire-calculatedExpression` | [http://build.fhir.org/ig/HL7/sdc/StructureDefinition-sdc-questionnaire-calculatedExpression.html](http://build.fhir.org/ig/HL7/sdc/StructureDefinition-sdc-questionnaire-calculatedExpression.html) | Can be an extension on any `item`; only one calculated expression per `item`. Is used to calculate an answer to a question. Currently only CQL expressions are supported. |
 | `ordinalValue` | [https://www.hl7.org/fhir/extension-ordinalvalue.html](https://www.hl7.org/fhir/extension-ordinalvalue.html) | Used to assign scores or weights question answer options. |
 | `rendering-xhtml` | [https://www.hl7.org/fhir/extension-rendering-xhtml.html](https://www.hl7.org/fhir/extension-rendering-xhtml.html) | Used to inject XHTML into question text (via `question.html`); multiple `rendering-xhtml` extensions on a single `item._text` will be concatenated. |

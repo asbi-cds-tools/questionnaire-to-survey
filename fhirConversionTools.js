@@ -5,7 +5,7 @@
  * @param {object} fhirJson - Object resulting from parsing the JSON of a FHIR Questionnaire resource
  * @returns {object} surveyJson - The converted Object
  */
-export function convertFromFhir(fhirJson) {
+ export function convertFromFhir(fhirJson) {
   // Make sure this a Questionnaire resource
   if (fhirJson.resourceType != 'Questionnaire') {
     throw new Error('Only FHIR Questionnaire resources are supported.');
@@ -22,10 +22,13 @@ export function convertFromFhir(fhirJson) {
   let entModRegExp = /^http:\/\/hl7\.org\/fhir\/uv\/sdc\/StructureDefinition\/sdc-questionnaire-entryMode/;
   let entModExt = fhirJson.extension ? fhirJson.extension.filter(ext => entModRegExp.test(ext.url))[0] : null;
   if (entModExt) {
-    // We currently only support the 'prior-edit' entry mode
-    if (['sequential', 'random'].includes(entModExt.valueCode)) {
+    if (!['sequential', 'prior-edit', 'random'].includes(entModExt.valueCode)) {
       throw new Error('sdc-questionnaire-entryMode extension does not specify a supported entry mode.');
     }
+  } else { // Default to 'prior-edit'
+    entModExt = {
+      valueCode: 'prior-edit'
+    };
   }
 
   // TODO: REPLACE REFERENCES TO CONTAINED RESOURCES WITH COPIES OF THE ACTUAL RESOURCES
@@ -33,14 +36,29 @@ export function convertFromFhir(fhirJson) {
   // Initialize our converted SurveyJS JSON
   let surveyJson = {};
   // We assume that only one question is shown at a time, per the supported entry mode (prior-edit)
-  surveyJson.pages = []; // each `item` in FHIR Questionnaire corresponds to a `page` in SurveyJS
+  if (entModExt.valueCode === 'random') {
+    surveyJson.questions = []; // each `item` in FHIR Questionnaire corresponds to a `question` in SurveyJS
+  } else { // 'sequential' or 'prior-edit'
+    surveyJson.pages = []; // each `item` in FHIR Questionnaire corresponds to a `page` in SurveyJS
+    if (entModExt.valueCode === 'sequential') {
+      // with a 'sequential' edit mode you can't change answers or go back
+      surveyJson.goNextPageAutomatic = true;
+      surveyJson.showNavigationButtons = false;
+    }
+  }
+
   surveyJson.calculatedValues = []; // calculatedValues are top-level elements in SurveyJS
 
   // Loop over each of the items in the Questionnaire and convert them
   fhirJson.item.forEach(item => {
     let {converted, calculatedValues} = convertItem(item); // Recursive function call
-    // Wrap each converted item in an object, one question per page, and add it to `pages` array
-    surveyJson.pages.push({questions: [Object.assign({}, converted)]});
+    if (entModExt.valueCode === 'random') {
+      // Wrap each converted item in an object, one question per page, and add it to `pages` array
+      surveyJson.questions.push(Object.assign({}, converted));
+    } else { // 'sequential' or 'prior-edit'
+      // Wrap each converted item in an object, one question per page, and add it to `pages` array
+      surveyJson.pages.push({questions: [Object.assign({}, converted)]});
+    }
     if (Object.keys(calculatedValues).length > 0) {
       surveyJson.calculatedValues.push(calculatedValues);
     }

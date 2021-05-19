@@ -2,7 +2,7 @@ import 'chai/register-expect';
 import { convertFromFhir } from '../fhirConversionTools.js';
 
 import nonQuestionnaireResource from './fixtures/nonQuestionnaireResource';
-import questionnaireRandomEntryMode from './fixtures/questionnaireRandomEntryMode';
+import questionnaireInvalidEntryMode from './fixtures/questionnaireInvalidEntryMode.json';
 import questionnaireValueSetAnswer from './fixtures/questionnaireValueSetAnswer.json';
 import questionnaireUnsupportedItemType from './fixtures/questionnaireUnsupportedItemType';
 import questionnaireUnsupportedExpressionLanguage from './fixtures/questionnaireUnsupportedExpressionLanguage.json';
@@ -15,7 +15,7 @@ describe('Error handling tests', function() {
   });
   
   it('should throw an error when presented with an entry mode that is not supported', function(){
-    expect(convertFromFhir.bind(convertFromFhir, questionnaireRandomEntryMode)).to.throw(
+    expect(convertFromFhir.bind(convertFromFhir, questionnaireInvalidEntryMode)).to.throw(
       'sdc-questionnaire-entryMode extension does not specify a supported entry mode.');
   });
 

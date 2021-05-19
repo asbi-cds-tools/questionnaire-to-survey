@@ -5,6 +5,7 @@ import questionnaireOneQuestion from './fixtures/questionnaireOneQuestion.json';
 import questionnaireMulitpleQuestions from './fixtures/questionnaireMultipleQuestions.json';
 import questionnaireSupportedExpressionLanguage from './fixtures/questionnaireSupportedExpressionLanguage.json';
 import questionnaireNestedItems from './fixtures/questionnaireNestedItems.json';
+import { expect } from 'chai';
 
 describe('Basic conversion tests', function() {
   it('should correctly convert a Questionnaire with a single item with answerOption', function(){
@@ -113,4 +114,48 @@ describe('More complex conversion tests', function() {
     expect(complex).to.exist;
     expect(complex.calculatedValues).to.have.lengthOf(1);
   });
+
+  it('should handle different entry modes appropriately', function() {
+
+    let randomEntry = {...questionnaireMulitpleQuestions};
+    randomEntry.extension = [
+      {
+        url: 'http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-entryMode',
+        valueCode: 'random'
+      }
+    ];
+    let randomQuestionnaire = convertFromFhir(randomEntry);
+    expect(randomQuestionnaire.questions).to.have.lengthOf(3);
+    expect(randomQuestionnaire.pages).to.not.exist;
+    expect(randomQuestionnaire.goNextPageAutomatic).to.not.exist;
+    expect(randomQuestionnaire.showNavigationButtons).to.not.exist;
+
+    let sequentialEntry = {...questionnaireMulitpleQuestions};
+    sequentialEntry.extension = [
+      {
+        url: 'http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-entryMode',
+        valueCode: 'sequential'
+      }
+    ];
+    let sequentialQuestionnaire = convertFromFhir(sequentialEntry);
+    expect(sequentialQuestionnaire.pages).to.have.lengthOf(3);
+    expect(sequentialQuestionnaire.questions).to.not.exist;
+    expect(sequentialQuestionnaire.goNextPageAutomatic).to.equal(true);
+    expect(sequentialQuestionnaire.showNavigationButtons).to.equal(false);
+
+    let priorEditEntry = {...questionnaireMulitpleQuestions};
+    priorEditEntry.extension = [
+      {
+        url: 'http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-entryMode',
+        valueCode: 'prior-edit'
+      }
+    ];
+    let priorEditQuestionnaire = convertFromFhir(priorEditEntry);
+    expect(priorEditQuestionnaire.pages).to.have.lengthOf(3);
+    expect(priorEditQuestionnaire.questions).to.not.exist;
+    expect(priorEditQuestionnaire.goNextPageAutomatic).to.not.exist;
+    expect(priorEditQuestionnaire.showNavigationButtons).to.not.exist;
+
+  });
+
 });
