@@ -1,6 +1,6 @@
 {
   "name": "questionnaire-to-survey",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A library for incorporating FHIR Questionnaires into SurveyJS.",
   "main": "main.js",
   "license": "Apache-2.0",
