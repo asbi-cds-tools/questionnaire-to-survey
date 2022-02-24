@@ -10,9 +10,9 @@ describe('Basic integration with SurveyJS', function() {
     let basic = converter(questionnaireBasic);
     expect(basic).to.exist;
     expect(basic.calculatedValues).to.have.length(0);
-    expect(basic.pages[0].elementsValue[0].propertyHash.choices[0].itemValue).to.equal('First choice');
-    expect(basic.pages[0].elementsValue[0].propertyHash.choices[1].itemValue).to.equal('Second choice');
-    expect(basic.pages[0].elementsValue[0].propertyHash.choices[2].itemValue).to.equal('Third choice');
+    expect(basic.pages[0].elementsValue[0].propertyHash.choices[0].propertyHash['value']).to.equal('First choice');
+    expect(basic.pages[0].elementsValue[0].propertyHash.choices[1].propertyHash['value']).to.equal('Second choice');
+    expect(basic.pages[0].elementsValue[0].propertyHash.choices[2].propertyHash['value']).to.equal('Third choice');
   });
 
   it('should add an ordinal value to each element', function(){
