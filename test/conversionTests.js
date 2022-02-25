@@ -1,11 +1,10 @@
-import 'chai/register-expect';
+import { expect } from 'chai';
 import { convertFromFhir } from '../fhirConversionTools.js';
 
-import questionnaireOneQuestion from './fixtures/questionnaireOneQuestion.json';
-import questionnaireMulitpleQuestions from './fixtures/questionnaireMultipleQuestions.json';
-import questionnaireSupportedExpressionLanguage from './fixtures/questionnaireSupportedExpressionLanguage.json';
-import questionnaireNestedItems from './fixtures/questionnaireNestedItems.json';
-import { expect } from 'chai';
+import questionnaireOneQuestion from './fixtures/questionnaireOneQuestion.json' assert { type: 'json' };
+import questionnaireMulitpleQuestions from './fixtures/questionnaireMultipleQuestions.json' assert { type: 'json' };
+import questionnaireSupportedExpressionLanguage from './fixtures/questionnaireSupportedExpressionLanguage.json' assert { type: 'json' };
+import questionnaireNestedItems from './fixtures/questionnaireNestedItems.json' assert { type: 'json' };
 
 describe('Basic conversion tests', function() {
   it('should correctly convert a Questionnaire with a single item with answerOption', function(){

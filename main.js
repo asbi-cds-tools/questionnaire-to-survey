@@ -1,4 +1,6 @@
-import { FunctionFactory, Model, Serializer, StylesManager } from 'survey-vue';
+import pkg from 'survey-vue';
+const { FunctionFactory, Model, Serializer, StylesManager } = pkg;
+
 import { convertFromFhir } from './fhirConversionTools.js';
 
 /**

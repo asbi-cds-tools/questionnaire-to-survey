@@ -1,12 +1,12 @@
-import 'chai/register-expect';
+import { expect } from 'chai';
 import { convertFromFhir } from '../fhirConversionTools.js';
 
-import nonQuestionnaireResource from './fixtures/nonQuestionnaireResource';
-import questionnaireInvalidEntryMode from './fixtures/questionnaireInvalidEntryMode.json';
-import questionnaireValueSetAnswer from './fixtures/questionnaireValueSetAnswer.json';
-import questionnaireUnsupportedItemType from './fixtures/questionnaireUnsupportedItemType';
-import questionnaireUnsupportedExpressionLanguage from './fixtures/questionnaireUnsupportedExpressionLanguage.json';
-import questionnareValueCodingNoDisplay from './fixtures/questionnaireValueCodingNoDisplay.json';
+import nonQuestionnaireResource from './fixtures/nonQuestionnaireResource.json' assert { type: 'json' };
+import questionnaireInvalidEntryMode from './fixtures/questionnaireInvalidEntryMode.json' assert { type: 'json' };
+import questionnaireValueSetAnswer from './fixtures/questionnaireValueSetAnswer.json' assert { type: 'json' };
+import questionnaireUnsupportedItemType from './fixtures/questionnaireUnsupportedItemType.json' assert { type: 'json' };
+import questionnaireUnsupportedExpressionLanguage from './fixtures/questionnaireUnsupportedExpressionLanguage.json' assert { type: 'json' };
+import questionnareValueCodingNoDisplay from './fixtures/questionnaireValueCodingNoDisplay.json' assert { type: 'json' };
 
 describe('Error handling tests', function() {
   it('should throw an error when presented with a non-Questionnaire resource', function(){

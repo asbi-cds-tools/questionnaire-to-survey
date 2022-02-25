@@ -1,9 +1,9 @@
-import 'chai/register-expect';
+import { expect } from 'chai';
 import { default as converter } from '../main.js';
 
-import questionnaireBasic from './fixtures/questionnaireOneQuestion.json';
-import questionnaireOrdinalValue from './fixtures/questionnaireOrdinalValue.json';
-import questionnaireCalculatedValue from './fixtures/questionnaireCalculatedValue.json';
+import questionnaireBasic from './fixtures/questionnaireOneQuestion.json' assert { type: 'json' };
+import questionnaireOrdinalValue from './fixtures/questionnaireOrdinalValue.json' assert { type: 'json' };
+import questionnaireCalculatedValue from './fixtures/questionnaireCalculatedValue.json' assert { type: 'json' };
 
 describe('Basic integration with SurveyJS', function() {
   it('should correctly convert a Questionnaire with answerOption items', function(){
