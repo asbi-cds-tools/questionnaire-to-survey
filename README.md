@@ -20,7 +20,22 @@ The base FHIR<sup>&reg;</sup> specification is meant to be an [80% solution](htt
 There are a number of important limitations potential users should be made aware of before using *Questionnaire to Survey*.
 
 ### Supported Front-End Frameworks
-*Questionnaire to Survey* currently only supports integration with [Vue.js](https://vuejs.org/) via the SurveyJS [survey-vue](https://www.npmjs.com/package/survey-vue) package. However, SurveyJS supports all of the main front-end frameworks and libraries and so there is no reason *Questionnaire to Survey* couldn't be extended to support JQuery, Angular, or React.
+As of version 2.0.0, *Questionnaire to Survey* in theory supports the same front-end frameworks that are supported by [SurveyJS](https://surveyjs.io/Overview/Library/):
+- [Angular](https://angular.io/)
+- [jQuery](https://jquery.com/)
+- [KnockOut](https://knockoutjs.com/)
+- [React](https://reactjs.org/)
+- [Vue.js](https://vuejs.org/)
+
+However, *Questionnaire to Survey* has only been tested with [Vue.js](https://vuejs.org/) via the SurveyJS [survey-vue](https://www.npmjs.com/package/survey-vue) package. This package had been included as a direct dependency in earlier versions of *Questionnaire to Survey* but has been removed in version 2.0.0. So it or one of the other SurveyJS packages (e.g., [survey-react](https://www.npmjs.com/package/survey-react)) must be included when using *Questionnaire to Survey*. The following snippet shows example usage with survey-vue:
+
+```js
+import converter from 'questionnaire-to-survey'; // converter() is a function that returns another function
+import { FunctionFactory, Model, Serializer, StylesManager } from 'survey-vue';
+const vueConverter = converter(FunctionFactory, Model, Serializer, StylesManager);
+// Create a SurveyJS object from a FHIR Questionnaire
+var model = vueConverter(questionnaire);
+```
 
 ### Supported Elements
 The following Questionnaire elements are currently supported:
@@ -50,12 +65,10 @@ The following FHIR<sup>&reg;</sup> and SDC extensions are currently supported:
 ## Usage
 
 ### Setup
-This project manages dependencies using the [Yarn package manager](https://yarnpkg.com/). *Questionnaire to Survey* can be built locally by typing `yarn` at the command line.
-
-It is intended that *Questionnaire to Survey* will eventually be published as a package on [npm](https://www.npmjs.com/). Until that point, it can be incorporated into other projects as a local dependency via the [yarn add command](https://classic.yarnpkg.com/en/docs/cli/add/) after packaging *Questionnaire to Survey* using the [yarn pack command](https://classic.yarnpkg.com/en/docs/cli/pack/).
+This project manages dependencies using the [Node Package Manager](https://www.npmjs.com/). *Questionnaire to Survey* can be built locally by typing `npm install` at the command line. It is published on npm and can be installed in project via: `npm install questionnaire-to-survey`.
 
 ### Tests
-See the `tests` folder for a number of automated tests which demonstrate the functionality of *Questionnaire to Survey*. They are written using the [Mocha](https://mochajs.org/) JavaScript testing framework. After setup the tests can be run from the command line using `yarn test`.
+See the `tests` folder for a number of automated tests which demonstrate the functionality of *Questionnaire to Survey*. They are written using the [Mocha](https://mochajs.org/) JavaScript testing framework. After setup the tests can be run from the command line using `npm run test`.
 
 ### Example
 A working example of using *Questionnaire to Survey* can be found in the [ASBI Screening App](https://github.com/asbi-cds-tools/asbi-screening-app).

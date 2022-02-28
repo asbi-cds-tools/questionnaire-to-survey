@@ -1,8 +1,8 @@
 import { convertFromFhir } from './fhirConversionTools.js';
 
-// TODO: Fill in function signature
 /**
- * 
+ * Pass in four SurveyJS objects and return a function that will convert FHIR 
+ * Questionnaires to SurveyJS models.
  * @param {*} FunctionFactory 
  * @param {*} Model 
  * @param {*} Serializer 
