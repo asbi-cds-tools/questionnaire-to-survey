@@ -16,7 +16,7 @@
     {
       "linkId": "1",
       "text": "Here is a multiple choice question",
-      "type": "string"
+      "type": "float"
     }
-  ]       
+  ]
 }
