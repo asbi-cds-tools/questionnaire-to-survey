@@ -103,7 +103,7 @@ export function convertItem(item) {
   let visibility = extractVisibility(item);
   if (visibility.conditions) converted.visibleIf = visibility.conditions;
   if (Object.keys(visibility.expressions).length > 0) {
-    // element.calculatedValues contains referenced calculated value expressions, which must be 
+    // element.calculatedValues contains referenced calculated value expressions, which must be
     // bubbled up to the top of the converted JSON
     calculatedValues.push(visibility.expressions);
   }
@@ -146,13 +146,13 @@ export function convertItem(item) {
       // element.converted contains the converted child item
       converted.elements.push(element.converted);
       if (Object.keys(element.calculatedValues).length > 0) {
-        // element.calculatedValues contains referenced calculated value expressions, which must be 
+        // element.calculatedValues contains referenced calculated value expressions, which must be
         // bubbled up to the top of the converted JSON
         calculatedValues.push(element.calculatedValues);
       }
     });
   }
-  // Need to return the converted item and the calculated values separately, since SurveyJS expects 
+  // Need to return the converted item and the calculated values separately, since SurveyJS expects
   // all calculated values to be defined at the top level in the JSON.
   return {
     converted: converted,
@@ -173,6 +173,7 @@ export function typeMap(fhirItemType, fhirItemRepeats = false) {
     case 'display': return 'html';
     case 'boolean': return 'boolean';
     case 'decimal': return 'text';
+    case 'string': return 'text';
     default:
       throw new Error('Unsupported item type.');
   }
@@ -192,7 +193,7 @@ export function extractAnswers(item) {
       let val = getAnswerValue(ans);
       let extRegExp = /^http:\/\/hl7\.org\/fhir\/StructureDefinition\/ordinalValue/;
       let ordValExt = ans.extension ?
-        ans.extension.filter(ext => extRegExp.test(ext.url)) : 
+        ans.extension.filter(ext => extRegExp.test(ext.url)) :
         [{valueDecimal: 0}];
       answers.push({
         value: val,
