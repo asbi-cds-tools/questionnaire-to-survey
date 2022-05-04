@@ -6,7 +6,7 @@
     "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\nTest\n</div>"
   },
   "url": "http://hl7.org/fhir/Questionnaire/1",
-  "title": "Questionnaire with an unsupported item type",
+  "title": "Questionnaire with a string item type",
   "status": "draft",
   "subjectType": [
     "Patient"
@@ -15,8 +15,16 @@
   "item": [
     {
       "linkId": "1",
-      "text": "Here is a multiple choice question",
-      "type": "float"
+      "text": "Here is a textual question",
+      "type": "string",
+      "_text": {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/rendering-xhtml",
+            "valueString": "Here is a textual question"
+          }
+        ]
+      }
     }
   ]
 }

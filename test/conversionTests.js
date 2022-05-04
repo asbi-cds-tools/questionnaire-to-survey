@@ -5,6 +5,7 @@ import questionnaireOneQuestion from './fixtures/questionnaireOneQuestion.json' 
 import questionnaireMulitpleQuestions from './fixtures/questionnaireMultipleQuestions.json' assert { type: 'json' };
 import questionnaireSupportedExpressionLanguage from './fixtures/questionnaireSupportedExpressionLanguage.json' assert { type: 'json' };
 import questionnaireNestedItems from './fixtures/questionnaireNestedItems.json' assert { type: 'json' };
+import questionnaireStringItemType from './fixtures/questionnaireStringItemType.json' assert { type: 'json' };
 
 describe('Basic conversion tests', function() {
   it('should correctly convert a Questionnaire with a single item with answerOption', function(){
@@ -76,12 +77,28 @@ describe('Basic conversion tests', function() {
     expect(simple.pages[2].questions[0].title).to.equal('Here is a display only question');
     expect(simple.pages[2].questions[0].html).to.equal('Here is a display only question');
     expect(simple.pages[2].questions[0].choices).to.not.exist;
-    
+
   });
+
+  it('should correctly convert a Questionnaire with a string questionnaire item type', function() {
+    const questionnaire = convertFromFhir(questionnaireStringItemType);
+
+    expect(questionnaire).to.exist;
+    expect(questionnaire.pages).to.exist;
+    expect(questionnaire.pages).to.have.lengthOf(1);
+
+    expect(questionnaire.pages[0].questions).to.have.lengthOf(1);
+    expect(questionnaire.pages[0].questions[0].name).to.equal('1');
+    expect(questionnaire.pages[0].questions[0].type).to.equal('text');
+    expect(questionnaire.pages[0].questions[0].title).to.equal('Here is a textual question');
+    expect(questionnaire.pages[0].questions[0].html).to.equal('Here is a textual question')
+    expect(questionnaire.pages[0].questions[0].choices).to.not.exist;
+  });
+
 });
 
 describe('More complex conversion tests', function() {
-  
+
   it('should correctly handle nested items', function(){
     let complex = convertFromFhir(questionnaireNestedItems);
     expect(complex).to.exist;
@@ -105,7 +122,7 @@ describe('More complex conversion tests', function() {
     expect(complex.pages[0].questions[0].elements[1].title).to.equal('Here is a display only question');
     expect(complex.pages[0].questions[0].elements[1].html).to.equal('Here is a display only question');
     expect(complex.pages[0].questions[0].elements[1].choices).to.not.exist;
-    
+
   });
 
   it('should extract calculated expressions and place them in calculatedValues', function(){

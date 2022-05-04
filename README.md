@@ -43,7 +43,7 @@ The following Questionnaire elements are currently supported:
 | Element | Mapping to SurveyJS | Notes & Limitations   |
 | ------- | ------------------- | --------------------- |
 | `item.linkID` | `question.name` |     |
-| `item.type`   | `question.type`   | Only items of type `['group', 'choice', 'display', 'boolean', 'decimal']` are currently supported. See `typeMap()`.  |
+| `item.type`   | `question.type`   | Only items of type `['group', 'choice', 'display', 'boolean', 'decimal','string']` are currently supported. See `typeMap()`.  |
 | `item.text`   | `question.title`  |   |
 | `item._text`  | `question.html`   | Any item [rendering-xhtml extensions](https://www.hl7.org/fhir/extension-rendering-xhtml.html) are added to `question.html`.  |
 | `item.answerOption`   | `question.choices`    | `['valueInteger', 'valueDate', 'valueTime', 'valueString', 'valueCoding']` are the currently supported `answerOption` value choices. See `extractAnswers()` and `getAnswerValues()`.   |
