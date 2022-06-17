@@ -77,7 +77,8 @@ export function convertItem(item) {
   // Basic properties
   let converted =  {
     name: item.linkId,
-    type: typeMap(item.type, item.repeats)
+    type: typeMap(item.type, item.repeats),
+    inputType: inputTypeMap(item.type)
   };
 
   // Get the item's title, which may be calculated by an expression
@@ -164,18 +165,42 @@ export function convertItem(item) {
  * A function for mapping FHIR Questionnaire item types to what SurveyJS expects
  * @param {string} fhirItemType - The type of the FHIR item
  * @param {boolean} fhirItemRepeats - A flag that when true indicates that an item can have multiple answers
- * @returns {string} - The corresponding type in SurveyJS
+ * @returns {string|Error} - The corresponding type in SurveyJS
  */
 export function typeMap(fhirItemType, fhirItemRepeats = false) {
   switch(fhirItemType) {
-    case 'group': return 'panel';
-    case 'choice': return fhirItemRepeats ? 'checkbox' : 'radiogroup';
-    case 'display': return 'html';
     case 'boolean': return 'boolean';
+    case 'choice': return fhirItemRepeats ? 'checkbox' : 'radiogroup';
+    case 'date': return 'text';
+    case 'dateTime': return 'text';
     case 'decimal': return 'text';
+    case 'display': return 'html';
+    case 'group': return 'panel';
+    case 'integer': return 'text';
     case 'string': return 'text';
+    case 'text': return 'comment';
+    case 'time': return 'text';
+    case 'url': return 'text';
     default:
       throw new Error('Unsupported item type.');
+  }
+}
+
+/**
+ * 
+ * @param {string} fhirItemType 
+ * @returns {string|null}
+ */
+export function inputTypeMap(fhirItemType) {
+  switch(fhirItemType) {
+    case 'date': return 'date';
+    case 'dateTime': return 'datetime-local';
+    case 'decimal': return 'text';
+    case 'integer': return 'number';
+    case 'string': return 'text';
+    case 'time': return 'time';
+    case 'url': return 'url';
+    default: null
   }
 }
 

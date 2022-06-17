@@ -6,6 +6,8 @@ import questionnaireMulitpleQuestions from './fixtures/questionnaireMultipleQues
 import questionnaireSupportedExpressionLanguage from './fixtures/questionnaireSupportedExpressionLanguage.json' assert { type: 'json' };
 import questionnaireNestedItems from './fixtures/questionnaireNestedItems.json' assert { type: 'json' };
 import questionnaireStringItemType from './fixtures/questionnaireStringItemType.json' assert { type: 'json' };
+import questionnaireDateItemType from './fixtures/questionnaireDateItemType.json' assert { type: 'json' };
+import questionnaireDecimalItemType from './fixtures/questionnaireDecimalItemType.json' assert { type: 'json' };
 
 describe('Basic conversion tests', function() {
   it('should correctly convert a Questionnaire with a single item with answerOption', function(){
@@ -90,8 +92,41 @@ describe('Basic conversion tests', function() {
     expect(questionnaire.pages[0].questions).to.have.lengthOf(1);
     expect(questionnaire.pages[0].questions[0].name).to.equal('1');
     expect(questionnaire.pages[0].questions[0].type).to.equal('text');
+    expect(questionnaire.pages[0].questions[0].inputType).to.equal('text');
     expect(questionnaire.pages[0].questions[0].title).to.equal('Here is a textual question');
     expect(questionnaire.pages[0].questions[0].html).to.equal('Here is a textual question')
+    expect(questionnaire.pages[0].questions[0].choices).to.not.exist;
+  });
+
+  it('should correctly convert a Questionnaire with a date questionnaire item type', function() {
+    const questionnaire = convertFromFhir(questionnaireDateItemType);
+
+    expect(questionnaire).to.exist;
+    expect(questionnaire.pages).to.exist;
+    expect(questionnaire.pages).to.have.lengthOf(1);
+
+    expect(questionnaire.pages[0].questions).to.have.lengthOf(1);
+    expect(questionnaire.pages[0].questions[0].name).to.equal('1');
+    expect(questionnaire.pages[0].questions[0].type).to.equal('text');
+    expect(questionnaire.pages[0].questions[0].inputType).to.equal('date');
+    expect(questionnaire.pages[0].questions[0].title).to.equal('Here is a date question');
+    expect(questionnaire.pages[0].questions[0].html).to.equal('Here is a date question')
+    expect(questionnaire.pages[0].questions[0].choices).to.not.exist;
+  });
+
+  it('should correctly convert a Questionnaire with a decimal questionnaire item type', function() {
+    const questionnaire = convertFromFhir(questionnaireDecimalItemType);
+
+    expect(questionnaire).to.exist;
+    expect(questionnaire.pages).to.exist;
+    expect(questionnaire.pages).to.have.lengthOf(1);
+
+    expect(questionnaire.pages[0].questions).to.have.lengthOf(1);
+    expect(questionnaire.pages[0].questions[0].name).to.equal('1');
+    expect(questionnaire.pages[0].questions[0].type).to.equal('text');
+    expect(questionnaire.pages[0].questions[0].inputType).to.equal('text');
+    expect(questionnaire.pages[0].questions[0].title).to.equal('Here is a decimal question');
+    expect(questionnaire.pages[0].questions[0].html).to.equal('Here is a decimal question')
     expect(questionnaire.pages[0].questions[0].choices).to.not.exist;
   });
 

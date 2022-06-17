@@ -1,0 +1,30 @@
+{
+  "resourceType": "Questionnaire",
+  "id": "date-item",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\nTest\n</div>"
+  },
+  "url": "http://hl7.org/fhir/Questionnaire/1",
+  "title": "Questionnaire with a date item type",
+  "status": "draft",
+  "subjectType": [
+    "Patient"
+  ],
+  "date": "2022-06",
+  "item": [
+    {
+      "linkId": "1",
+      "text": "Here is a decimal question",
+      "type": "decimal",
+      "_text": {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/rendering-xhtml",
+            "valueString": "Here is a decimal question"
+          }
+        ]
+      }
+    }
+  ]
+}

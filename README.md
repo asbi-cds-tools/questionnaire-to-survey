@@ -27,7 +27,7 @@ As of version 2.0.0, *Questionnaire to Survey* in theory supports the same front
 - [React](https://reactjs.org/)
 - [Vue.js](https://vuejs.org/)
 
-However, *Questionnaire to Survey* has only been tested with [Vue.js](https://vuejs.org/) via the SurveyJS [survey-vue](https://www.npmjs.com/package/survey-vue) package. This package had been included as a direct dependency in earlier versions of *Questionnaire to Survey* but has been removed in version 2.0.0. So it or one of the other SurveyJS packages (e.g., [survey-react](https://www.npmjs.com/package/survey-react)) must be included when using *Questionnaire to Survey*. The following snippet shows example usage with survey-vue:
+SurveyJS [survey-vue](https://www.npmjs.com/package/survey-vue) had been included as a direct dependency in earlier versions of *Questionnaire to Survey* but has been removed in version 2.0.0. So it or one of the other SurveyJS packages (e.g., [survey-react](https://www.npmjs.com/package/survey-react)) must be included when using *Questionnaire to Survey*. The following snippet shows example usage with survey-vue:
 
 ```js
 import converter from 'questionnaire-to-survey'; // converter() is a function that returns another function
@@ -43,7 +43,7 @@ The following Questionnaire elements are currently supported:
 | Element | Mapping to SurveyJS | Notes & Limitations   |
 | ------- | ------------------- | --------------------- |
 | `item.linkID` | `question.name` |     |
-| `item.type`   | `question.type`   | Only items of type `['group', 'choice', 'display', 'boolean', 'decimal','string']` are currently supported. See `typeMap()`.  |
+| `item.type`   | `question.type`   | Only items of type `['boolean', 'choice', 'date', 'dateTime', 'decimal', 'display', 'group', 'integer', 'string', 'text', 'time', 'url']` are currently supported. See `typeMap()` in [fhirConversionTools](fhirConversionTools.js#L170).  |
 | `item.text`   | `question.title`  |   |
 | `item._text`  | `question.html`   | Any item [rendering-xhtml extensions](https://www.hl7.org/fhir/extension-rendering-xhtml.html) are added to `question.html`.  |
 | `item.answerOption`   | `question.choices`    | `['valueInteger', 'valueDate', 'valueTime', 'valueString', 'valueCoding']` are the currently supported `answerOption` value choices. See `extractAnswers()` and `getAnswerValues()`.   |
@@ -78,7 +78,7 @@ An incomplete list of other projects which can implement FHIR<sup>&reg;</sup> Qu
 - [LForms](https://github.com/lhncbc/lforms): Capable of importing and rendering FHIR<sup>&reg;</sup> Questionnaires and supports many of the SDC extensions. Written using [AngularJS](https://angularjs.org/) and does not support CQL expression evaluation.
 
 ## License
-(C) 2020 The MITRE Corporation. All Rights Reserved. Approved for Public Release: 20-0458. Distribution Unlimited.
+(C) 2022 The MITRE Corporation. All Rights Reserved. Approved for Public Release: 20-0458. Distribution Unlimited.
 
 Unless otherwise noted, this work is available under an Apache 2.0 license. It was produced by the MITRE Corporation for the National Center on Birth Defects and Developmental Disabilities, Centers for Disease Control and Prevention in accordance with the Statement of Work, contract number 75FCMC18D0047, task order number 75D30119F05691.
 
