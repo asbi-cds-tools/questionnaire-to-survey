@@ -296,12 +296,12 @@ export function extractVisibility(item) {
     let behave = item.enableBehavior ? item.enableBehavior : 'all';
     let behaviorOperator = behave == 'all' ? ' and ' : ' or '; // all->and & any->or
     visibleIf.conditions = visConds.map(cond => {
-      let condAnswer = Object.keys(cond).filter(key => /^answer/.test(key)); // extract answer[x]
-      if (cond.operator == 'exists') return `{${cond.question}} != undefined`; // special case
-      else if (condAnswer == 'answerCoding') {
-        return `{${cond.question}} ${cond.operator} '${cond[condAnswer].display}'`;
-      }
-      else return `{${cond.question}} ${cond.operator} '${cond[condAnswer]}'`;
+      let condAnswerKey = Object.keys(cond).filter(key => /^answer/.test(key))[0]; // extract answer[x]
+      let condAnswer = condAnswerKey == 'answerCoding' ? cond[condAnswerKey].display : cond[condAnswerKey];
+      if (cond.operator == 'exists') return `{${cond.question}} != undefined`;
+      else if (cond.operator == '=') return `{${cond.question}} contains '${condAnswer}'`;
+      else if (cond.operator == '!=') return `{${cond.question}} notcontains '${condAnswer}'`;
+      else return `{${cond.question}} ${cond.operator} '${condAnswer}'`;
     }).reduce((c1,c2) => {
       if (!c2) return c1;
       else return c1 + behaviorOperator + c2

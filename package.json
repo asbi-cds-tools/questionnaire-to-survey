@@ -1,6 +1,6 @@
 {
   "name": "questionnaire-to-survey",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "A library for incorporating FHIR Questionnaires into SurveyJS.",
   "main": "main.js",
   "type": "module",
