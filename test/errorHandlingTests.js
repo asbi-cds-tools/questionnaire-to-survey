@@ -19,9 +19,9 @@ describe('Error handling tests', function() {
       'sdc-questionnaire-entryMode extension does not specify a supported entry mode.');
   });
 
-  it('should throw an error when presented with an item with an answerValueSet', function(){
+  it('should throw an error when presented with an item with an answerValueSet but the ValueSet cannot be resolved', function(){
     expect(convertFromFhir.bind(convertFromFhir, questionnaireValueSetAnswer)).to.throw(
-      'Answer value sets are not currently supported.');
+      'Answer value set could not be resolved.');
   });
 
   it('should throw an error when presented with an item with an unsupported type', function(){
@@ -34,8 +34,8 @@ describe('Error handling tests', function() {
       'sdc-questionnaire-calculatedExpression extension does not specify a supported language.');
   });
 
-  it('should throw an error if an answerOption has a valueCoding with no display property', function(){
+  it('should throw an error if an answerOption has a valueCoding with no display or code properties', function(){
     expect(convertFromFhir.bind(convertFromFhir, questionnareValueCodingNoDisplay)).to.throw(
-      'Answer valueCoding with no display property.');
+      'Answer valueCoding with no display or code property.');
   });
 });
