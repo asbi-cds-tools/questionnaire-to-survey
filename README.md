@@ -47,6 +47,7 @@ The following Questionnaire elements are currently supported:
 | `item.text`   | `question.title`  |   |
 | `item._text`  | `question.html`   | Any item [rendering-xhtml extensions](https://www.hl7.org/fhir/extension-rendering-xhtml.html) are added to `question.html`.  |
 | `item.answerOption`   | `question.choices`    | `['valueInteger', 'valueDate', 'valueTime', 'valueString', 'valueCoding']` are the currently supported `answerOption` value choices. See `extractAnswers()` and `getAnswerValues()`.   |
+| `item.answerValueSet` | `question.choices` | You must provide a `resolver()` function that takes in the Canonical reference to a ValueSet resource and returns an object with the parsed JSON representation of that resource. |
 | `item.enableWhen` | `question.visibleIf`  | The FHIR<sup>&reg;</sup> specification [says](https://www.hl7.org/fhir/questionnaire-definitions.html#Questionnaire.item.enableWhen) "not enabled" can either mean not visible or that answers cannot be captured; we interpret to the former when mapping to SurveyJS. See `extractVisibility()`.  |
 | `item.enableBehavior` | `question.visibleIf`  | Multiple `enableWhen` conditions are combined into a single `visibleIf` expression using the specified `enableBehavior`. See `extractVisibility()`.   |
 
@@ -72,6 +73,37 @@ See the `tests` folder for a number of automated tests which demonstrate the fun
 
 ### Example
 A working example of using *Questionnaire to Survey* can be found in the [ASBI Screening App](https://github.com/asbi-cds-tools/asbi-screening-app).
+
+### Generating QuestionnaireResponse resources from completed surveys
+
+As of Version 2.3.0, *Questionnaire to Survey* exports a function for converting the output of SurveyJS into QuestionnaireResponse resources.  Example usage:
+
+```js
+import converter, { responser } from 'questionnaire-to-survey'
+import { FunctionFactory, ItemValue, Model, Serializer, StylesManager, Survey } from 'survey-react'
+import "survey-react/defaultV2.min.css";
+
+export default function SurveyComponent(props) {
+  let {fhirQuestionnaire, saveResponses, resolver} = props;
+  
+  // Create a SurveyJS model that implements `fhirQuestionnaire`
+  const reactConverter = converter(FunctionFactory, Model, Serializer, StylesManager, resolver);
+  var model = reactConverter(fhirQuestionnaire, null, 'defaultV2');
+
+  // A function for converting SurveyJS outputs into a FHIR QuestionnaireResponse
+  const responseConverter = responser(fhirQuestionnaire, ItemValue);
+
+  // A React component for our FHIR Questionnaire
+  return (
+    <Survey
+      id="survey-root"
+      model={model}
+      showCompletedPage={false}
+      onComplete={data => saveResponses(responseConverter(data))}
+    />
+  )
+}
+```
 
 ## Other FHIR<sup>&reg;</sup> Questionnaire / SDC Implementations
 An incomplete list of other projects which can implement FHIR<sup>&reg;</sup> Questionnaires:
