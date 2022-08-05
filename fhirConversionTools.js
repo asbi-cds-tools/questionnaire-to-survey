@@ -5,7 +5,7 @@
  * @param {object} fhirJson - Object resulting from parsing the JSON of a FHIR Questionnaire resource
  * @returns {object} surveyJson - The converted Object
  */
- export function convertFromFhir(fhirJson) {
+ export function convertFromFhir(fhirJson, resolver=()=>{}) {
   // Make sure this a Questionnaire resource
   if (fhirJson.resourceType != 'Questionnaire') {
     throw new Error('Only FHIR Questionnaire resources are supported.');
@@ -51,7 +51,7 @@
 
   // Loop over each of the items in the Questionnaire and convert them
   fhirJson.item.forEach(item => {
-    let {converted, calculatedValues} = convertItem(item); // Recursive function call
+    let {converted, calculatedValues} = convertItem(item, resolver); // Recursive function call
     if (entModExt.valueCode === 'random') {
       // Wrap each converted item in an object, one question per page, and add it to `pages` array
       surveyJson.questions.push(Object.assign({}, converted));
@@ -73,7 +73,7 @@
  * @param {object} item - An item element from a FHIR Questionnaire
  * @returns {object} Contains the item formatted for SurveyJS as well as any calculated value expressions.
  */
-export function convertItem(item) {
+export function convertItem(item, resolver=()=>{}) {
   // Basic properties
   let converted =  {
     name: item.linkId,
@@ -118,7 +118,7 @@ export function convertItem(item) {
   }
 
   // Extract the answers for this item
-  let choices = extractAnswers(item);
+  let choices = extractAnswers(item, resolver);
   if (choices) converted.choices = choices;
 
   // Extract any expressions used in place for the response
@@ -163,12 +163,12 @@ export function convertItem(item) {
 
 /**
  * A function for mapping FHIR Questionnaire item types to what SurveyJS expects
- * @param {string} fhirItemType - The type of the FHIR item
+ * @param {string} valueType - The type of the FHIR item
  * @param {boolean} fhirItemRepeats - A flag that when true indicates that an item can have multiple answers
  * @returns {string|Error} - The corresponding type in SurveyJS
  */
-export function typeMap(fhirItemType, fhirItemRepeats = false) {
-  switch(fhirItemType) {
+export function typeMap(valueType, fhirItemRepeats = false) {
+  switch(valueType) {
     case 'boolean': return 'boolean';
     case 'choice': return fhirItemRepeats ? 'checkbox' : 'radiogroup';
     case 'date': return 'text';
@@ -188,11 +188,11 @@ export function typeMap(fhirItemType, fhirItemRepeats = false) {
 
 /**
  * 
- * @param {string} fhirItemType 
+ * @param {string} valueType 
  * @returns {string|null}
  */
-export function inputTypeMap(fhirItemType) {
-  switch(fhirItemType) {
+export function inputTypeMap(valueType) {
+  switch(valueType) {
     case 'date': return 'date';
     case 'dateTime': return 'datetime-local';
     case 'decimal': return 'text';
@@ -209,13 +209,40 @@ export function inputTypeMap(fhirItemType) {
  * @param {object} item - A FHIR Questionnaire item
  * @returns {array} answers - The answers from the item converted to SurveyJS
  */
-export function extractAnswers(item) {
+export function extractAnswers(item, resolver=()=>{}) {
   if (item.answerValueSet) {
-    throw new Error('Answer value sets are not currently supported.');
+    let valueSet = resolver(item.answerValueSet);
+    if (valueSet && valueSet.length > 0) valueSet = valueSet[0];
+    else throw new Error('Answer value set could not be resolved.');
+    const includedAnswers = valueSet?.compose?.include ?? [{}];
+    const answers = includedAnswers.reduce((acc,cv) => {
+      const system = cv?.system ?? '';
+      const concept = cv?.concept ?? [];
+      return [
+        ...acc,
+        concept.reduce((cacc,ccv) => {
+          let val = ccv.display;
+          return [
+            ...cacc,
+            {
+              value: val,
+              text: String(val),
+              ordinalValue: 0,
+              valueCodingCode: ccv.code ?? '',
+              valueCodingSystem: system ?? '',
+              valueCodingDisplay: ccv?.designation?.value ?? '',
+              valueType: 'coding'
+            }
+          ]
+        },[])
+      ];
+    },[]).flat();
+    return answers;
   } else if (item.answerOption) {
     let answers = [];
     item.answerOption.forEach(ans => {
       let val = getAnswerValue(ans);
+      let type = getAnswerType(ans);
       let extRegExp = /^http:\/\/hl7\.org\/fhir\/StructureDefinition\/ordinalValue/;
       let ordValExt = ans.extension ?
         ans.extension.filter(ext => extRegExp.test(ext.url)) :
@@ -223,7 +250,11 @@ export function extractAnswers(item) {
       answers.push({
         value: val,
         text: String(val),
-        ordinalValue: ordValExt[0].valueDecimal
+        ordinalValue: ordValExt[0].valueDecimal,
+        valueCodingCode: ans?.valueCoding?.code ?? '',
+        valueCodingSystem: ans?.valueCoding?.system ?? '',
+        valueCodingDisplay: ans?.valueCoding?.display ?? '',
+        valueType: type
       });
     });
     return answers;
@@ -242,8 +273,24 @@ export function getAnswerValue(ans) {
   else if (ans.valueString) return ans.valueString;
   else if (ans.valueCoding) {
     if (ans.valueCoding.display) return ans.valueCoding.display;
-    else throw new Error('Answer valueCoding with no display property.');
+    else if (ans.valueCoding.code) return ans.valueCoding.code;
+    else throw new Error('Answer valueCoding with no display or code property.');
   }
+  else if (ans.valueRefernce) throw new Error('valueReferences not currently supported in answers.');
+  else throw new Error('Unsupported value[x] in an answerOption.');
+}
+
+/**
+ * 
+ * @param {*} ans 
+ * @returns 
+ */
+export function getAnswerType(ans) {
+  if (ans.valueInteger) return 'valueInteger';
+  else if (ans.valueDate) return 'valueDate';
+  else if (ans.valueTime) return 'valueTime';
+  else if (ans.valueString) return 'valueString';
+  else if (ans.valueCoding) return 'valueCoding';
   else if (ans.valueRefernce) throw new Error('valueReferences not currently supported in answers.');
   else throw new Error('Unsupported value[x] in an answerOption.');
 }

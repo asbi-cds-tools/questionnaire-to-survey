@@ -1,4 +1,5 @@
 import { convertFromFhir } from './fhirConversionTools.js';
+export { responser } from './convertResponses.js';
 
 /**
  * Pass in four SurveyJS objects and return a function that will convert FHIR 
@@ -8,7 +9,7 @@ import { convertFromFhir } from './fhirConversionTools.js';
  * @param {*} Serializer 
  * @param {*} StylesManager 
  */
-export default function(FunctionFactory, Model, Serializer, StylesManager) {
+export default function(FunctionFactory, Model, Serializer, StylesManager, resolver=()=>{}) {
 
   /**
    * Generates a SurveyJS Model using a FHIR Questionnaire resource.
@@ -23,12 +24,21 @@ export default function(FunctionFactory, Model, Serializer, StylesManager) {
   return function (fhirJson, evaluateExpression = null, styleTheme = null) {
     // Need to add ordinalValue as a custom value on each answer item
     Serializer.addProperty('itemvalue', 'ordinalValue:number');
+    Serializer.addProperty('itemvalue', 'valueCodingCode:string');
+    Serializer.addProperty('itemvalue', 'valueCodingSystem:string');
+    Serializer.addProperty('itemvalue', 'valueCodingDisplay:string');
+    Serializer.addProperty('itemvalue', 'valueType:string');
+    Serializer.addProperty('survey', { 
+      name: 'questionnaireUrl:string',
+      default: fhirJson?.url, 
+      category: 'general' 
+    });
 
     // Add a CQL Processor for evaluating expressions
     if (evaluateExpression) FunctionFactory.Instance.register('evaluateExpression', evaluateExpression, true);
 
     // Convert the FHIR Questionnaire JSON to JSON formatted for SurveyJS
-    let surveyJson = convertFromFhir(fhirJson);
+    let surveyJson = convertFromFhir(fhirJson, resolver);
 
     // Check to ensure that evaluateExpression() isn't null if it is being referenced by any calculatedValues
     let expRegExp = /evaluateExpression\(/;
