@@ -50,6 +50,8 @@ The following Questionnaire elements are currently supported:
 | `item.answerValueSet` | `question.choices` | You must provide a `resolver()` function that takes in the Canonical reference to a ValueSet resource and returns an object with the parsed JSON representation of that resource. |
 | `item.enableWhen` | `question.visibleIf`  | The FHIR<sup>&reg;</sup> specification [says](https://www.hl7.org/fhir/questionnaire-definitions.html#Questionnaire.item.enableWhen) "not enabled" can either mean not visible or that answers cannot be captured; we interpret to the former when mapping to SurveyJS. See `extractVisibility()`.  |
 | `item.enableBehavior` | `question.visibleIf`  | Multiple `enableWhen` conditions are combined into a single `visibleIf` expression using the specified `enableBehavior`. See `extractVisibility()`.   |
+| `item.readOnly` | `question.readOnly` | |
+| `item.initial`  | `question.defaultValue` | Currently only `item.initial.valueString`s are supported. |
 
 ### Supported Extensions
 The following FHIR<sup>&reg;</sup> and SDC extensions are currently supported:

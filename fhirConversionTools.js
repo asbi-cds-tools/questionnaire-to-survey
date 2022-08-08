@@ -81,6 +81,9 @@ export function convertItem(item, resolver=()=>{}) {
     inputType: inputTypeMap(item.type)
   };
 
+  if (item.readOnly) converted.readOnly = true;
+  if (item.initial) converted.defaultValue = getDefaultValue(item.initial);
+
   // Get the item's title, which may be calculated by an expression
   let extendedText = getTextExtensions(item._text); // Note: https://www.hl7.org/fhir/json.html#primitive
   let calculatedValues = [];
@@ -159,6 +162,11 @@ export function convertItem(item, resolver=()=>{}) {
     converted: converted,
     calculatedValues: calculatedValues
   };
+}
+
+function getDefaultValue(initial) {
+  if (initial.valueString) return initial.valueString;
+  else return null;
 }
 
 /**
