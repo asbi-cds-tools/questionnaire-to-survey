@@ -165,8 +165,8 @@ export function convertItem(item, resolver=()=>{}) {
 }
 
 function getDefaultValue(initial) {
-  if (initial.valueString) return initial.valueString;
-  else return null;
+  if (Array.isArray(initial) == false) initial = [initial];
+  return initial.map(i => i?.valueString);
 }
 
 /**
