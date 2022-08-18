@@ -294,11 +294,11 @@ export function getAnswerValue(ans) {
  * @returns 
  */
 export function getAnswerType(ans) {
-  if (ans.valueInteger) return 'valueInteger';
-  else if (ans.valueDate) return 'valueDate';
-  else if (ans.valueTime) return 'valueTime';
-  else if (ans.valueString) return 'valueString';
-  else if (ans.valueCoding) return 'valueCoding';
+  if (ans.valueInteger) return 'integer';
+  else if (ans.valueDate) return 'date';
+  else if (ans.valueTime) return 'time';
+  else if (ans.valueString) return 'string';
+  else if (ans.valueCoding) return 'coding';
   else if (ans.valueRefernce) throw new Error('valueReferences not currently supported in answers.');
   else throw new Error('Unsupported value[x] in an answerOption.');
 }
