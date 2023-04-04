@@ -238,7 +238,7 @@ export function extractAnswers(item, resolver=()=>{}) {
               ordinalValue: 0,
               valueCodingCode: ccv.code ?? '',
               valueCodingSystem: system ?? '',
-              valueCodingDisplay: ccv?.designation?.value ?? '',
+              valueCodingDisplay: ccv?.designation?.length > 0 && ccv.designation[0].value ? ccv.designation[0].value : '',
               valueType: 'coding'
             }
           ]
